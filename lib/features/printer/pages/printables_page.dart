@@ -28,23 +28,33 @@ class PrintablesPage extends StatelessWidget {
           ListView(
             padding: const EdgeInsets.all(16),
             children: const [
-              _Calendar(asset: Assets.calendar1),
-              _Calendar(asset: Assets.calendar2),
-              _Calendar(asset: Assets.calendar3),
-              _Calendar(asset: Assets.calendar4),
-              _Calendar(asset: Assets.calendar5),
-              _Calendar(asset: Assets.calendar6),
+              _Photo(asset: Assets.calendar1),
+              _Photo(asset: Assets.calendar2),
+              _Photo(asset: Assets.calendar3),
+              _Photo(asset: Assets.calendar4),
+              _Photo(asset: Assets.calendar5),
+              _Photo(asset: Assets.calendar6),
             ],
           ),
-          Text('3'),
+          ListView(
+            padding: const EdgeInsets.all(16),
+            children: const [
+              _Photo(asset: Assets.planner1),
+              _Photo(asset: Assets.planner2),
+              _Photo(asset: Assets.planner3),
+              _Photo(asset: Assets.planner4),
+              _Photo(asset: Assets.planner5),
+              _Photo(asset: Assets.planner6),
+            ],
+          ),
         ],
       ),
     );
   }
 }
 
-class _Calendar extends StatelessWidget {
-  const _Calendar({required this.asset});
+class _Photo extends StatelessWidget {
+  const _Photo({required this.asset});
 
   final String asset;
 
@@ -61,7 +71,7 @@ class _Calendar extends StatelessWidget {
         },
         child: ImageWidget(
           asset,
-          cacheWidth: 1000,
+          cacheWidth: 500,
         ),
       ),
     );

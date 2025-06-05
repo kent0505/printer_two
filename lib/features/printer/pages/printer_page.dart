@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/models/vip.dart';
@@ -13,6 +14,7 @@ import '../../internet/bloc/internet_bloc.dart';
 import '../../internet/widgets/no_internet.dart';
 import '../../photo/screens/albums_page.dart';
 import '../../vip/bloc/vip_bloc.dart';
+import '../../vip/screens/vip_page.dart';
 import 'email_page.dart';
 import 'files_page.dart';
 import 'printables_page.dart';
@@ -58,8 +60,13 @@ class _PrinterPageState extends State<PrinterPage> {
     );
   }
 
-  void onPhotos() {
-    context.push(AlbumsPage.routePath);
+  void onPhotos() async {
+    final PermissionState ps = await PhotoManager.requestPermissionExtend();
+    if (ps.hasAccess && mounted) {
+      context.push(AlbumsPage.routePath);
+    } else {
+      PhotoManager.openSetting();
+    }
   }
 
   void onEmail() {
@@ -67,11 +74,25 @@ class _PrinterPageState extends State<PrinterPage> {
   }
 
   void onPrintables() {
-    context.push(PrintablesPage.routePath);
+    if (context.read<VipBloc>().state.isVip) {
+      context.push(PrintablesPage.routePath);
+    } else {
+      context.push(
+        VipPage.routePath,
+        extra: Paywalls.identifier3,
+      );
+    }
   }
 
   void onWebPages() {
-    context.push(WebPage.routePath);
+    if (context.read<VipBloc>().state.isVip) {
+      context.push(WebPage.routePath);
+    } else {
+      context.push(
+        VipPage.routePath,
+        extra: Paywalls.identifier3,
+      );
+    }
   }
 
   void onPdf() {}

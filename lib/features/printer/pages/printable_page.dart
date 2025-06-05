@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -30,15 +30,32 @@ class PrintablePage extends StatefulWidget {
 class _PrintablePageState extends State<PrintablePage> {
   final screenshotController = ScreenshotController();
 
-  Uint8List? bytes;
   File file = File('');
-  final pdf = pw.Document();
 
   void onShare() {
     shareFiles([file]);
   }
 
-  void onPrint() {
+  void onPrint() async {
+    final pdf = pw.Document();
+
+    final bytes = await file.readAsBytes();
+
+    pdf.addPage(
+      pw.Page(
+        margin: pw.EdgeInsets.zero,
+        pageFormat: PdfPageFormat.a4,
+        build: (context) {
+          return pw.Center(
+            child: pw.Image(
+              pw.MemoryImage(bytes),
+              fit: pw.BoxFit.contain,
+            ),
+          );
+        },
+      ),
+    );
+
     printPdf(pdf);
   }
 
@@ -49,29 +66,13 @@ class _PrintablePageState extends State<PrintablePage> {
       const Duration(seconds: 2),
       () async {
         if (mounted) {
-          bytes = await screenshotController.capture();
-          if (bytes != null) {
-            final dir = await getTemporaryDirectory();
-            file = File('${dir.path}/printable.png');
-            file = await file.writeAsBytes(bytes!);
+          final byteData = await rootBundle.load(widget.asset);
+          final tempDir = await getTemporaryDirectory();
+          file = File('${tempDir.path}/printable.png');
+          await file.writeAsBytes(byteData.buffer.asUint8List());
 
-            pdf.addPage(
-              pw.Page(
-                margin: pw.EdgeInsets.zero,
-                pageFormat: PdfPageFormat.a4,
-                build: (context) {
-                  return pw.Center(
-                    child: pw.Image(
-                      pw.MemoryImage(bytes!),
-                      fit: pw.BoxFit.contain,
-                    ),
-                  );
-                },
-              ),
-            );
-            if (mounted) {
-              setState(() {});
-            }
+          if (mounted) {
+            setState(() {});
           }
         }
       },
@@ -83,7 +84,7 @@ class _PrintablePageState extends State<PrintablePage> {
     return Scaffold(
       appBar: Appbar(
         title: 'Printables',
-        right: bytes == null
+        right: file.path.isEmpty
             ? const SizedBox(
                 height: 44,
                 width: 44,
@@ -110,7 +111,7 @@ class _PrintablePageState extends State<PrintablePage> {
           MainButton(
             title: 'Print',
             horizontal: 16,
-            active: bytes != null,
+            active: file.path.isNotEmpty,
             onPressed: onPrint,
           ),
           const SizedBox(height: 44),

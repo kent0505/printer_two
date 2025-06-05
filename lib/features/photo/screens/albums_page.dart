@@ -11,21 +11,10 @@ import '../../../core/widgets/loading_widget.dart';
 import '../bloc/photo_bloc.dart';
 import 'photo_page.dart';
 
-class AlbumsPage extends StatefulWidget {
+class AlbumsPage extends StatelessWidget {
   const AlbumsPage({super.key});
 
   static const routePath = '/AlbumsPage';
-
-  @override
-  State<AlbumsPage> createState() => _AlbumsPageState();
-}
-
-class _AlbumsPageState extends State<AlbumsPage> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<PhotoBloc>().add(LoadPhotos());
-  }
 
   @override
   Widget build(BuildContext context) {

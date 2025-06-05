@@ -21,7 +21,7 @@ class VipSheet extends StatefulWidget {
       showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        isDismissible: true,
+        isDismissible: false,
         builder: (context) {
           return VipSheet(identifier: identifier);
         },
@@ -51,14 +51,15 @@ class _VipSheetState extends State<VipSheet> {
   @override
   void initState() {
     super.initState();
-    context.read<VipBloc>().add(CheckVip(identifier: widget.identifier));
+    final bloc = context.read<VipBloc>();
+    bloc.add(CheckVip(identifier: widget.identifier));
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         visible = true;
       });
 
       if (mounted) {
-        if (context.read<VipBloc>().state.offering == null) {
+        if (bloc.state.offering == null) {
           context.pop();
           DialogWidget.show(context, title: 'Error');
         }

@@ -74,7 +74,7 @@ Future<void> main() async {
           BlocProvider(
             create: (context) => PhotoBloc(
               repository: context.read<PhotoRepository>(),
-            ),
+            )..add(LoadPhotos()),
           ),
         ],
         child: const MyApp(),

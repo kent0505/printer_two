@@ -6,14 +6,14 @@ final theme = ThemeData(
   useMaterial3: false,
   brightness: Brightness.light,
   fontFamily: AppFonts.w400,
-  textSelectionTheme: TextSelectionThemeData(
+  textSelectionTheme: const TextSelectionThemeData(
     cursorColor: Color(0xff095EF1),
     selectionColor: Color(0xff095EF1),
     selectionHandleColor: Color(0xff095EF1),
   ),
 
   // OVERSCROLL
-  colorScheme: ColorScheme.light(
+  colorScheme: const ColorScheme.light(
     surface: Color(0xffF2F5F8), // bg color when push
     secondary: Color(0xffd5d5d5), // overscroll
   ),
@@ -22,12 +22,12 @@ final theme = ThemeData(
   scaffoldBackgroundColor: Color(0xffF2F5F8),
 
   // APPBAR
-  appBarTheme: AppBarTheme(
+  appBarTheme: const AppBarTheme(
     backgroundColor: Color(0xffF2F5F8),
     centerTitle: true,
     toolbarHeight: 64, // app bar size
     elevation: 0,
-    actionsPadding: const EdgeInsets.symmetric(
+    actionsPadding: EdgeInsets.symmetric(
       horizontal: 16,
       vertical: 8,
     ),
@@ -39,7 +39,7 @@ final theme = ThemeData(
   ),
 
   // DIALOG
-  dialogTheme: DialogThemeData(
+  dialogTheme: const DialogThemeData(
     insetPadding: EdgeInsets.zero,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(14)),

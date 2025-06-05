@@ -48,7 +48,10 @@ class _TabWidgetState extends State<TabWidget>
       children: [
         Container(
           height: 52,
-          margin: const EdgeInsets.symmetric(horizontal: 16),
+          margin: const EdgeInsets.symmetric(horizontal: 16).copyWith(
+            bottom: 8,
+            top: 4,
+          ),
           padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(
             color: Colors.white,

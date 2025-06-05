@@ -33,30 +33,26 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
     emit(PhotoLoading());
 
     try {
-      if (await _repository.hasAccess()) {
-        if (albums.isEmpty && assetEntities.isEmpty && bytes.isEmpty ||
-            event.assetPathEntity != null) {
-          final assetPathEntities = await _repository.getAssetPathEntities();
-          albums = await _repository.getAlbums(assetPathEntities);
-          assetEntities = await _repository.getPhotos(
-            assetPathEntities,
-            assetPathEntity: event.assetPathEntity,
-          );
-          bytes = await _repository.getBytes(assetEntities);
-        }
-
-        emit(
-          PhotosLoaded(
-            albums: albums,
-            assetEntities: assetEntities,
-            bytes: bytes,
-            albumTitle:
-                event.assetPathEntity?.name ?? albums[0].assetPathEntity.name,
-          ),
+      if (albums.isEmpty && assetEntities.isEmpty && bytes.isEmpty ||
+          event.assetPathEntity != null) {
+        final assetPathEntities = await _repository.getAssetPathEntities();
+        albums = await _repository.getAlbums(assetPathEntities);
+        assetEntities = await _repository.getPhotos(
+          assetPathEntities,
+          assetPathEntity: event.assetPathEntity,
         );
-      } else {
-        PhotoManager.openSetting();
+        bytes = await _repository.getBytes(assetEntities);
       }
+
+      emit(
+        PhotosLoaded(
+          albums: albums,
+          assetEntities: assetEntities,
+          bytes: bytes,
+          albumTitle:
+              event.assetPathEntity?.name ?? albums[0].assetPathEntity.name,
+        ),
+      );
     } catch (e) {
       logger(e);
     }

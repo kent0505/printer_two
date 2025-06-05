@@ -8,7 +8,6 @@ import '../../../core/models/album.dart';
 abstract interface class PhotoRepository {
   const PhotoRepository();
 
-  Future<bool> hasAccess();
   Future<List<AssetPathEntity>> getAssetPathEntities();
   Future<List<AssetEntity>> getPhotos(
     List<AssetPathEntity> assetPathEntities, {
@@ -21,12 +20,6 @@ abstract interface class PhotoRepository {
 
 final class PhotoRepositoryImpl implements PhotoRepository {
   PhotoRepositoryImpl();
-
-  @override
-  Future<bool> hasAccess() async {
-    final PermissionState ps = await PhotoManager.requestPermissionExtend();
-    return ps.hasAccess;
-  }
 
   @override
   Future<List<AssetPathEntity>> getAssetPathEntities() async {

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants.dart';
+import '../../../core/models/vip.dart';
 import '../../../core/widgets/button.dart';
 import '../../../core/widgets/svg_widget.dart';
 import '../../onboard/pages/printer_model_page.dart';
+import '../../vip/bloc/vip_bloc.dart';
+import '../../vip/screens/vip_page.dart';
 import 'info_page.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -15,7 +19,13 @@ class SettingsPage extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        _Unlock(),
+        BlocBuilder<VipBloc, Vip>(
+          builder: (context, state) {
+            return state.isVip || state.loading
+                ? const SizedBox()
+                : const _UnlockCard();
+          },
+        ),
         const SizedBox(height: 12),
         const _VipStatus(),
         const SizedBox(height: 12),
@@ -36,23 +46,11 @@ class SettingsPage extends StatelessWidget {
             ),
             const _Divider(),
             _Tile(
-              title: 'FAQ',
-              asset: Assets.s5,
-              onPressed: () {},
-            ),
-            const _Divider(),
-            _Tile(
               title: 'How to connect a printer? ',
               asset: Assets.s6,
               onPressed: () {
                 context.push(InfoPage.routePath);
               },
-            ),
-            const _Divider(),
-            _Tile(
-              title: 'Manage Subscription',
-              asset: Assets.s7,
-              onPressed: () {},
             ),
           ],
         ),
@@ -150,8 +148,8 @@ class _Tile extends StatelessWidget {
   }
 }
 
-class _Unlock extends StatelessWidget {
-  const _Unlock();
+class _UnlockCard extends StatelessWidget {
+  const _UnlockCard();
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +169,12 @@ class _Unlock extends StatelessWidget {
         ),
       ),
       child: Button(
-        onPressed: () {},
+        onPressed: () {
+          context.push(
+            VipPage.routePath,
+            extra: Paywalls.identifier3,
+          );
+        },
         child: const Row(
           children: [
             SvgWidget(Assets.s1),
@@ -226,11 +229,11 @@ class _VipStatus extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
       ),
-      child: const Row(
+      child: Row(
         children: [
-          SvgWidget(Assets.s2),
-          SizedBox(width: 8),
-          Expanded(
+          const SvgWidget(Assets.s2),
+          const SizedBox(width: 8),
+          const Expanded(
             child: Text(
               'Subscription',
               maxLines: 1,
@@ -242,14 +245,18 @@ class _VipStatus extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: 8),
-          Text(
-            'Free',
-            style: TextStyle(
-              color: Color(0xff095EF1),
-              fontSize: 16,
-              fontFamily: AppFonts.w600,
-            ),
+          const SizedBox(width: 8),
+          BlocBuilder<VipBloc, Vip>(
+            builder: (context, state) {
+              return Text(
+                state.isVip ? 'PRO' : 'Free',
+                style: const TextStyle(
+                  color: Color(0xff095EF1),
+                  fontSize: 16,
+                  fontFamily: AppFonts.w600,
+                ),
+              );
+            },
           ),
         ],
       ),

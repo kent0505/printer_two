@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/models/vip.dart';
@@ -29,21 +30,26 @@ class PrinterPage extends StatefulWidget {
 }
 
 class _PrinterPageState extends State<PrinterPage> {
-  void onScanner() async {
-    if (!await Permission.camera.status.isGranted) {
-      final result = await Permission.camera.request();
-      if (result.isPermanentlyDenied) {
-        await openAppSettings();
-        return;
-      }
-      if (!result.isGranted) return;
-    }
+  void getPictures() async {
     final pictures = await CunningDocumentScanner.getPictures();
     if (pictures != null && pictures.isNotEmpty && mounted) {
       context.push(
         ScannerPage.routePath,
         extra: pictures,
       );
+    }
+  }
+
+  void onScanner() async {
+    if (await Permission.camera.status.isGranted) {
+      getPictures();
+    } else {
+      final result = await Permission.camera.request();
+      if (result.isGranted) {
+        getPictures();
+      } else {
+        await openAppSettings();
+      }
     }
   }
 
@@ -95,9 +101,29 @@ class _PrinterPageState extends State<PrinterPage> {
     }
   }
 
-  void onPdf() {}
+  void onPdf() async {
+    try {
+      if (!await launchUrl(
+        Uri.parse(Urls.url1),
+      )) {
+        throw 'Could not launch url';
+      }
+    } catch (e) {
+      logger(e);
+    }
+  }
 
-  void onInvoice() {}
+  void onInvoice() async {
+    try {
+      if (!await launchUrl(
+        Uri.parse(Urls.url2),
+      )) {
+        throw 'Could not launch url';
+      }
+    } catch (e) {
+      logger(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

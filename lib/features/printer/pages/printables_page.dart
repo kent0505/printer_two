@@ -24,7 +24,44 @@ class PrintablesPage extends StatelessWidget {
           'Planners',
         ],
         pages: [
-          Text('1'),
+          ListView(
+            padding: const EdgeInsets.all(16),
+            children: const [
+              Row(
+                children: [
+                  Expanded(
+                    child: _Photo(asset: Assets.card1),
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: _Photo(asset: Assets.card2),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: _Photo(asset: Assets.card3),
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: _Photo(asset: Assets.card4),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: _Photo(asset: Assets.card5),
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: _Photo(asset: Assets.card6),
+                  ),
+                ],
+              ),
+            ],
+          ),
           ListView(
             padding: const EdgeInsets.all(16),
             children: const [

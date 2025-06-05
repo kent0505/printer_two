@@ -69,9 +69,7 @@ abstract final class Assets {
   static const s2 = 'assets/s2.svg';
   static const s3 = 'assets/s3.svg';
   static const s4 = 'assets/s4.svg';
-  static const s5 = 'assets/s5.svg';
   static const s6 = 'assets/s6.svg';
-  static const s7 = 'assets/s7.svg';
   static const s8 = 'assets/s8.svg';
   static const s9 = 'assets/s9.svg';
   static const share = 'assets/share.svg';

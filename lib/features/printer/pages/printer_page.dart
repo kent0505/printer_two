@@ -10,6 +10,7 @@ import '../../../core/constants.dart';
 import '../../../core/models/vip.dart';
 import '../../../core/utils.dart';
 import '../../../core/widgets/button.dart';
+import '../../../core/widgets/dialog_widget.dart';
 import '../../../core/widgets/svg_widget.dart';
 import '../../internet/bloc/internet_bloc.dart';
 import '../../internet/widgets/no_internet.dart';
@@ -30,25 +31,28 @@ class PrinterPage extends StatefulWidget {
 }
 
 class _PrinterPageState extends State<PrinterPage> {
-  void getPictures() async {
-    final pictures = await CunningDocumentScanner.getPictures();
-    if (pictures != null && pictures.isNotEmpty && mounted) {
-      context.push(
-        ScannerPage.routePath,
-        extra: pictures,
-      );
-    }
-  }
-
   void onScanner() async {
-    if (await Permission.camera.status.isGranted) {
-      getPictures();
+    final status = await Permission.camera.request();
+
+    if (status.isGranted) {
+      try {
+        final pictures = await CunningDocumentScanner.getPictures();
+        if (pictures != null && pictures.isNotEmpty && mounted) {
+          context.push(ScannerPage.routePath, extra: pictures);
+        }
+      } catch (e) {
+        logger("Scanner error: $e");
+      }
     } else {
-      final result = await Permission.camera.request();
-      if (result.isGranted) {
-        getPictures();
-      } else {
-        await openAppSettings();
+      if (mounted) {
+        DialogWidget.show(
+          context,
+          title:
+              'This feature needs camera access. Please enable it in your settings.',
+          onOK: () {
+            openAppSettings();
+          },
+        );
       }
     }
   }

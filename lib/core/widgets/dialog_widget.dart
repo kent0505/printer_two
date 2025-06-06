@@ -5,20 +5,29 @@ import '../constants.dart';
 import 'button.dart';
 
 class DialogWidget extends StatelessWidget {
-  const DialogWidget({super.key, required this.title});
+  const DialogWidget({
+    super.key,
+    required this.title,
+    this.onOK,
+  });
 
   final String title;
+  final VoidCallback? onOK;
 
   static void show(
     BuildContext context, {
     required String title,
+    VoidCallback? onOK,
   }) {
     showDialog(
       context: context,
       barrierColor: Colors.transparent,
       useSafeArea: false,
       builder: (context) {
-        return DialogWidget(title: title);
+        return DialogWidget(
+          title: title,
+          onOK: onOK,
+        );
       },
     );
   }
@@ -39,7 +48,7 @@ class DialogWidget extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: Colors.black,
-                  fontSize: 18,
+                  fontSize: 16,
                   fontFamily: AppFonts.w600,
                 ),
               ),
@@ -47,54 +56,31 @@ class DialogWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _Button(
-                    title: 'OK',
-                    color: const Color(0xff095EF1),
-                    fontFamily: AppFonts.w400,
-                    onPressed: () {
-                      context.pop();
-                    },
+                  Expanded(
+                    child: Button(
+                      onPressed: onOK ??
+                          () {
+                            context.pop();
+                          },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'OK',
+                            style: TextStyle(
+                              color: const Color(0xff095EF1),
+                              fontSize: 16,
+                              fontFamily: AppFonts.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _Button extends StatelessWidget {
-  const _Button({
-    required this.title,
-    required this.color,
-    required this.fontFamily,
-    required this.onPressed,
-  });
-
-  final String title;
-  final Color color;
-  final String fontFamily;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Button(
-        onPressed: onPressed,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                color: color,
-                fontSize: 16,
-                fontFamily: fontFamily,
-              ),
-            ),
-          ],
         ),
       ),
     );

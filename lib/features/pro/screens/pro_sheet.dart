@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 
-import '../../../core/models/vip.dart';
+import '../../../core/models/pro.dart';
 import '../../../core/utils.dart';
 import '../../../core/widgets/dialog_widget.dart';
-import '../bloc/vip_bloc.dart';
+import '../bloc/pro_bloc.dart';
 
-class VipSheet extends StatefulWidget {
-  const VipSheet({super.key, required this.identifier});
+class ProSheet extends StatefulWidget {
+  const ProSheet({super.key, required this.identifier});
 
   final String identifier;
 
@@ -23,7 +23,7 @@ class VipSheet extends StatefulWidget {
         isScrollControlled: true,
         isDismissible: false,
         builder: (context) {
-          return VipSheet(identifier: identifier);
+          return ProSheet(identifier: identifier);
         },
       );
     } catch (e) {
@@ -32,10 +32,10 @@ class VipSheet extends StatefulWidget {
   }
 
   @override
-  State<VipSheet> createState() => _VipSheetState();
+  State<ProSheet> createState() => _ProSheetState();
 }
 
-class _VipSheetState extends State<VipSheet> {
+class _ProSheetState extends State<ProSheet> {
   bool isClosed = false;
   bool visible = false;
 
@@ -45,14 +45,14 @@ class _VipSheetState extends State<VipSheet> {
       context.pop();
     }
     DialogWidget.show(context, title: title);
-    context.read<VipBloc>().add(CheckVip(identifier: widget.identifier));
+    context.read<ProBloc>().add(CheckPro(identifier: widget.identifier));
   }
 
   @override
   void initState() {
     super.initState();
-    final bloc = context.read<VipBloc>();
-    bloc.add(CheckVip(identifier: widget.identifier));
+    final bloc = context.read<ProBloc>();
+    bloc.add(CheckPro(identifier: widget.identifier));
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         visible = true;
@@ -73,7 +73,7 @@ class _VipSheetState extends State<VipSheet> {
       opacity: visible ? 1.0 : 0.0,
       duration: const Duration(milliseconds: 1000),
       curve: Curves.easeInOut,
-      child: BlocBuilder<VipBloc, Vip>(
+      child: BlocBuilder<ProBloc, Pro>(
         builder: (context, state) {
           if (state.loading || state.offering == null) {
             return const SizedBox();

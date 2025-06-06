@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants.dart';
-import '../../../core/models/vip.dart';
+import '../../../core/models/pro.dart';
 import '../../../core/widgets/button.dart';
 import '../../../core/widgets/svg_widget.dart';
 import '../../onboard/pages/printer_model_page.dart';
-import '../../vip/bloc/vip_bloc.dart';
-import '../../vip/screens/vip_page.dart';
+import '../../pro/bloc/pro_bloc.dart';
+import '../../pro/screens/pro_page.dart';
 import 'info_page.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -19,9 +19,9 @@ class SettingsPage extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        BlocBuilder<VipBloc, Vip>(
+        BlocBuilder<ProBloc, Pro>(
           builder: (context, state) {
-            return state.isVip || state.loading
+            return state.isPro || state.loading
                 ? const SizedBox()
                 : const _UnlockCard();
           },
@@ -171,7 +171,7 @@ class _UnlockCard extends StatelessWidget {
       child: Button(
         onPressed: () {
           context.push(
-            VipPage.routePath,
+            ProPage.routePath,
             extra: Paywalls.identifier3,
           );
         },
@@ -246,10 +246,10 @@ class _VipStatus extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          BlocBuilder<VipBloc, Vip>(
+          BlocBuilder<ProBloc, Pro>(
             builder: (context, state) {
               return Text(
-                state.isVip ? 'PRO' : 'Free',
+                state.isPro ? 'PRO' : 'Free',
                 style: const TextStyle(
                   color: Color(0xff095EF1),
                   fontSize: 16,

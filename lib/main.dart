@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:printer_two/core/utils.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/constants.dart';
 import 'core/router.dart';
 import 'core/themes.dart';
+import 'features/fire/bloc/fire_bloc.dart';
+import 'features/fire/data/fire_repository.dart';
 import 'features/home/bloc/home_bloc.dart';
-import 'features/internet/bloc/internet_bloc.dart';
+import 'features/connection/bloc/connection_bloc.dart';
 import 'features/onboard/data/onboard_repository.dart';
 import 'features/photo/bloc/photo_bloc.dart';
 import 'features/photo/data/photo_repository.dart';
-import 'features/vip/bloc/vip_bloc.dart';
-import 'features/vip/data/vip_repository.dart';
+import 'features/pro/bloc/pro_bloc.dart';
+import 'features/pro/data/pro_repository.dart';
+import 'features/fire/firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,13 +31,15 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
   // await prefs.clear();
 
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
-
-  await Purchases.configure(
-    PurchasesConfiguration('appl_CGzDMWeVRNbUSsDDrPTrfgGDBHA'),
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  if (isIOS()) {
+    await Purchases.configure(
+      PurchasesConfiguration('appl_CGzDMWeVRNbUSsDDrPTrfgGDBHA'),
+    );
+  }
 
   runApp(
     MultiRepositoryProvider(
@@ -40,11 +47,11 @@ Future<void> main() async {
         RepositoryProvider<OnboardRepository>(
           create: (context) => OnboardRepositoryImpl(prefs: prefs),
         ),
-        // RepositoryProvider<FirebaseRepository>(
-        //   create: (context) => FirebaseRepositoryImpl(prefs: prefs),
-        // ),
-        RepositoryProvider<VipRepository>(
-          create: (context) => VipRepositoryImpl(prefs: prefs),
+        RepositoryProvider<FireRepository>(
+          create: (context) => FireRepositoryImpl(prefs: prefs),
+        ),
+        RepositoryProvider<ProRepository>(
+          create: (context) => ProRepositoryImpl(prefs: prefs),
         ),
         RepositoryProvider<PhotoRepository>(
           create: (context) => PhotoRepositoryImpl(),
@@ -54,23 +61,23 @@ Future<void> main() async {
         providers: [
           BlocProvider(create: (context) => HomeBloc()),
           BlocProvider(
-            create: (context) => InternetBloc()..add(CheckInternet()),
+            create: (context) => ConnectionBloc()..add(CheckConnection()),
           ),
           BlocProvider(
             create: (context) =>
-                VipBloc(repository: context.read<VipRepository>())
+                ProBloc(repository: context.read<ProRepository>())
                   ..add(
-                    CheckVip(
+                    CheckPro(
                       identifier: Paywalls.identifier1,
                       initial: true,
                     ),
                   ),
           ),
-          // BlocProvider(
-          //   create: (context) => FirebaseBloc(
-          //     repository: context.read<FirebaseRepository>(),
-          //   ),
-          // ),
+          BlocProvider(
+            create: (context) => FireBloc(
+              repository: context.read<FireRepository>(),
+            ),
+          ),
           BlocProvider(
             create: (context) => PhotoBloc(
               repository: context.read<PhotoRepository>(),

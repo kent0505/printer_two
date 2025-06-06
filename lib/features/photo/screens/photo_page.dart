@@ -77,7 +77,7 @@ class _PhotoPageState extends State<PhotoPage> {
         );
       }
 
-      if (mounted) printPdf(pdf);
+      if (mounted) printPDF(pdf);
     }
   }
 

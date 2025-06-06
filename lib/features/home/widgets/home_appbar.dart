@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants.dart';
-import '../../../core/models/vip.dart';
+import '../../../core/models/pro.dart';
 import '../../../core/widgets/button.dart';
 import '../../../core/widgets/loading_widget.dart';
 import '../../../core/widgets/svg_widget.dart';
 import '../../settings/pages/info_page.dart';
-import '../../vip/bloc/vip_bloc.dart';
-import '../../vip/screens/vip_sheet.dart';
+import '../../pro/bloc/pro_bloc.dart';
+import '../../pro/screens/pro_sheet.dart';
 import '../bloc/home_bloc.dart';
 
 class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
@@ -50,20 +50,20 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             minSize: 52,
             child: const SvgWidget(Assets.info),
           ),
-          BlocBuilder<VipBloc, Vip>(
+          BlocBuilder<ProBloc, Pro>(
             builder: (context, state) {
               return state.loading
                   ? const SizedBox(
                       width: 52,
                       child: LoadingWidget(),
                     )
-                  : state.isVip
+                  : state.isPro
                       ? const SizedBox()
                       : Padding(
                           padding: const EdgeInsets.only(left: 8),
                           child: Button(
                             onPressed: () {
-                              VipSheet.show(
+                              ProSheet.show(
                                 context,
                                 identifier: Paywalls.identifier2,
                               );

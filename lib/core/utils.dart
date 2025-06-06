@@ -11,7 +11,7 @@ import 'package:share_plus/share_plus.dart';
 
 void logger(Object message) => developer.log(message.toString());
 
-void printPdf(Document pdf) {
+void printPDF(Document pdf) {
   try {
     Printing.layoutPdf(
       format: PdfPageFormat.a4,
@@ -51,4 +51,8 @@ Future<File?> pickFile() async {
     logger(e);
   }
   return null;
+}
+
+bool isIOS() {
+  return Platform.isIOS;
 }

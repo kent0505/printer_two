@@ -7,16 +7,17 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/constants.dart';
-import '../../../core/models/vip.dart';
+import '../../../core/models/pro.dart';
 import '../../../core/utils.dart';
 import '../../../core/widgets/button.dart';
 import '../../../core/widgets/dialog_widget.dart';
 import '../../../core/widgets/svg_widget.dart';
-import '../../internet/bloc/internet_bloc.dart';
-import '../../internet/widgets/no_internet.dart';
+import '../../fire/bloc/fire_bloc.dart';
+import '../../connection/bloc/connection_bloc.dart';
+import '../../connection/widgets/no_connection.dart';
 import '../../photo/screens/albums_page.dart';
-import '../../vip/bloc/vip_bloc.dart';
-import '../../vip/screens/vip_page.dart';
+import '../../pro/bloc/pro_bloc.dart';
+import '../../pro/screens/pro_page.dart';
 import 'email_page.dart';
 import 'files_page.dart';
 import 'printables_page.dart';
@@ -38,7 +39,10 @@ class _PrinterPageState extends State<PrinterPage> {
       try {
         final pictures = await CunningDocumentScanner.getPictures();
         if (pictures != null && pictures.isNotEmpty && mounted) {
-          context.push(ScannerPage.routePath, extra: pictures);
+          context.push(
+            ScannerPage.routePath,
+            extra: pictures,
+          );
         }
       } catch (e) {
         logger("Scanner error: $e");
@@ -75,7 +79,16 @@ class _PrinterPageState extends State<PrinterPage> {
     if (ps.hasAccess && mounted) {
       context.push(AlbumsPage.routePath);
     } else {
-      PhotoManager.openSetting();
+      if (mounted) {
+        DialogWidget.show(
+          context,
+          title:
+              'This feature needs access to your photo gallery. Please enable it in your settings.',
+          onOK: () {
+            PhotoManager.openSetting();
+          },
+        );
+      }
     }
   }
 
@@ -84,22 +97,22 @@ class _PrinterPageState extends State<PrinterPage> {
   }
 
   void onPrintables() {
-    if (context.read<VipBloc>().state.isVip) {
+    if (context.read<ProBloc>().state.isPro) {
       context.push(PrintablesPage.routePath);
     } else {
       context.push(
-        VipPage.routePath,
+        ProPage.routePath,
         extra: Paywalls.identifier3,
       );
     }
   }
 
   void onWebPages() {
-    if (context.read<VipBloc>().state.isVip) {
+    if (context.read<ProBloc>().state.isPro) {
       context.push(WebPage.routePath);
     } else {
       context.push(
-        VipPage.routePath,
+        ProPage.routePath,
         extra: Paywalls.identifier3,
       );
     }
@@ -131,7 +144,7 @@ class _PrinterPageState extends State<PrinterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<InternetBloc, bool>(
+    return BlocBuilder<ConnectionBloc, bool>(
       builder: (context, hasInternet) {
         return hasInternet
             ? SingleChildScrollView(
@@ -176,20 +189,22 @@ class _PrinterPageState extends State<PrinterPage> {
                       description: 'Print any website in full size',
                       onPressed: onWebPages,
                     ),
-                    _PrinterCard(
-                      id: 7,
-                      title: 'PDF Service',
-                      onPressed: onPdf,
-                    ),
-                    _PrinterCard(
-                      id: 8,
-                      title: 'Invoice',
-                      onPressed: onInvoice,
-                    ),
+                    if (context.read<FireBloc>().state) ...[
+                      _PrinterCard(
+                        id: 7,
+                        title: 'PDF Service',
+                        onPressed: onPdf,
+                      ),
+                      _PrinterCard(
+                        id: 8,
+                        title: 'Invoice',
+                        onPressed: onInvoice,
+                      ),
+                    ],
                   ],
                 ),
               )
-            : const NoInternet();
+            : const NoConnection();
       },
     );
   }
@@ -235,7 +250,7 @@ class _PrinterCard extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
       ),
-      child: BlocBuilder<VipBloc, Vip>(
+      child: BlocBuilder<ProBloc, Pro>(
         builder: (context, state) {
           return Button(
             onPressed: state.loading ? null : onPressed,

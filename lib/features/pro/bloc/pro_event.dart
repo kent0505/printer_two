@@ -1,10 +1,10 @@
-part of 'vip_bloc.dart';
+part of 'pro_bloc.dart';
 
 @immutable
-sealed class VipEvent {}
+sealed class ProEvent {}
 
-final class CheckVip extends VipEvent {
-  CheckVip({
+final class CheckPro extends ProEvent {
+  CheckPro({
     required this.identifier,
     this.initial = false,
   });

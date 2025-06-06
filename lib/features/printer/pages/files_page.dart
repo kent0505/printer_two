@@ -72,7 +72,7 @@ class _FilesPageState extends State<FilesPage> {
     if (widget.file.path.toLowerCase().endsWith('.pdf')) {
       Printing.layoutPdf(onLayout: (_) => widget.file.readAsBytes());
     } else {
-      printPdf(pdf);
+      printPDF(pdf);
     }
   }
 

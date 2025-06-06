@@ -73,7 +73,8 @@ class _WebPageState extends State<WebPage> {
           },
         ),
       );
-      printPdf(pdf);
+
+      printPDF(pdf);
     } catch (e) {
       logger(e);
     }

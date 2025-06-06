@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../core/constants.dart';
 import '../../../core/widgets/main_button.dart';
 
-class NoInternet extends StatelessWidget {
-  const NoInternet({super.key});
+class NoConnection extends StatelessWidget {
+  const NoConnection({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -15,7 +15,7 @@ import '../features/printer/pages/printables_page.dart';
 import '../features/printer/pages/scanner_page.dart';
 import '../features/printer/pages/web_page.dart';
 import '../features/settings/pages/info_page.dart';
-import '../features/vip/screens/vip_page.dart';
+import '../features/pro/screens/pro_page.dart';
 import 'models/album.dart';
 
 final routerConfig = GoRouter(
@@ -80,8 +80,8 @@ final routerConfig = GoRouter(
       builder: (context, state) => const AlbumsPage(),
     ),
     GoRoute(
-      path: VipPage.routePath,
-      builder: (context, state) => VipPage(
+      path: ProPage.routePath,
+      builder: (context, state) => ProPage(
         identifier: state.extra as String,
       ),
     ),

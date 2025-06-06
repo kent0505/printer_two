@@ -3,17 +3,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/constants.dart';
 
-abstract interface class VipRepository {
-  const VipRepository();
+abstract interface class ProRepository {
+  const ProRepository();
 
   int getShowCount();
   Future<void> saveShowCount(int value);
-  Future<bool> getVip();
+  Future<bool> getPro();
   Future<Offering?> getOffering(String identifier);
 }
 
-final class VipRepositoryImpl implements VipRepository {
-  VipRepositoryImpl({required SharedPreferences prefs}) : _prefs = prefs;
+final class ProRepositoryImpl implements ProRepository {
+  ProRepositoryImpl({required SharedPreferences prefs}) : _prefs = prefs;
 
   final SharedPreferences _prefs;
 
@@ -28,9 +28,9 @@ final class VipRepositoryImpl implements VipRepository {
   }
 
   @override
-  Future<bool> getVip() async {
+  Future<bool> getPro() async {
     CustomerInfo customerInfo = await Purchases.getCustomerInfo().timeout(
-      const Duration(seconds: 2),
+      const Duration(seconds: 3),
     );
     return customerInfo.entitlements.active.isNotEmpty;
   }
@@ -38,7 +38,7 @@ final class VipRepositoryImpl implements VipRepository {
   @override
   Future<Offering?> getOffering(String identifier) async {
     Offerings offerings = await Purchases.getOfferings().timeout(
-      const Duration(seconds: 2),
+      const Duration(seconds: 3),
     );
     return offerings.getOffering(identifier);
   }

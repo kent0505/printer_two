@@ -16,8 +16,8 @@ import '../../../core/widgets/button.dart';
 import '../../../core/widgets/image_widget.dart';
 import '../../../core/widgets/snack_widget.dart';
 import '../../../core/widgets/svg_widget.dart';
-import '../../vip/bloc/vip_bloc.dart';
-import '../../vip/screens/vip_page.dart';
+import '../../pro/bloc/pro_bloc.dart';
+import '../../pro/screens/pro_page.dart';
 
 class ScannerPage extends StatefulWidget {
   const ScannerPage({super.key, required this.paths});
@@ -33,10 +33,10 @@ class ScannerPage extends StatefulWidget {
 class _ScannerPageState extends State<ScannerPage> {
   List<File> files = [];
   // FirebaseData data = FirebaseData();
-  bool isVip = false;
+  bool isPro = false;
 
   void onCopyText() async {
-    if (isVip) {
+    if (isPro) {
       final textRecognizer = TextRecognizer();
       final recognizedText = await textRecognizer.processImage(
         InputImage.fromFile(files.first),
@@ -56,7 +56,7 @@ class _ScannerPageState extends State<ScannerPage> {
     } else {
       logger('XYZ');
       context.push(
-        VipPage.routePath,
+        ProPage.routePath,
         extra: Paywalls.identifier3,
       );
     }
@@ -74,18 +74,18 @@ class _ScannerPageState extends State<ScannerPage> {
   }
 
   void onShare() {
-    if (isVip) {
+    if (isPro) {
       shareFiles(files);
     } else {
       context.push(
-        VipPage.routePath,
+        ProPage.routePath,
         extra: Paywalls.identifier3,
       );
     }
   }
 
   void onPrint() async {
-    if (isVip) {
+    if (isPro) {
       final pdf = pw.Document();
 
       for (final file in files) {
@@ -107,10 +107,10 @@ class _ScannerPageState extends State<ScannerPage> {
         );
       }
 
-      printPdf(pdf);
+      printPDF(pdf);
     } else {
       context.push(
-        VipPage.routePath,
+        ProPage.routePath,
         extra: Paywalls.identifier3,
       );
     }
@@ -120,7 +120,7 @@ class _ScannerPageState extends State<ScannerPage> {
   void initState() {
     super.initState();
     // data = context.read<FirebaseBloc>().state;
-    isVip = context.read<VipBloc>().state.isVip;
+    isPro = context.read<ProBloc>().state.isPro;
     files = List.generate(
       widget.paths.length,
       (index) {

@@ -56,7 +56,7 @@ class _PrintablePageState extends State<PrintablePage> {
       ),
     );
 
-    printPdf(pdf);
+    printPDF(pdf);
   }
 
   @override

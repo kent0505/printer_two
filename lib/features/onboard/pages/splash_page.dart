@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/widgets/svg_widget.dart';
+import '../../fire/bloc/fire_bloc.dart';
 import '../../home/pages/home_page.dart';
 import '../data/onboard_repository.dart';
 import 'onboard_page.dart';
@@ -36,7 +37,7 @@ class _SplashPageState extends State<SplashPage>
       ),
     );
 
-    // context.read<FirebaseBloc>().add(GetFirebaseData());
+    context.read<FireBloc>().add(GetFireData());
 
     Future.delayed(
       const Duration(seconds: 3),

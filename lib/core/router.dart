@@ -59,12 +59,6 @@ final routerConfig = GoRouter(
         asset: state.extra as String,
       ),
     ),
-    // GoRoute(
-    //   path: PrintableDetailPage.routePath,
-    //   builder: (context, state) => PrintableDetailPage(
-    //     printable: state.extra as Printable,
-    //   ),
-    // ),
     GoRoute(
       path: WebPage.routePath,
       builder: (context, state) => const WebPage(),

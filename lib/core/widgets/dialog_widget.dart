@@ -62,13 +62,13 @@ class DialogWidget extends StatelessWidget {
                           () {
                             context.pop();
                           },
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             'OK',
                             style: TextStyle(
-                              color: const Color(0xff095EF1),
+                              color: Color(0xff095EF1),
                               fontSize: 16,
                               fontFamily: AppFonts.w700,
                             ),

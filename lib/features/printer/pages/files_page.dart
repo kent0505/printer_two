@@ -104,6 +104,16 @@ class _FilesPageState extends State<FilesPage> {
 
           return pdf.save();
         },
+        onError: (context, error) {
+          return const Text(
+            'Unsupported format',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+              fontFamily: AppFonts.w700,
+            ),
+          );
+        },
       ),
     );
   }

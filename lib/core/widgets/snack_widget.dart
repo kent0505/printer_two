@@ -18,12 +18,12 @@ class SnackWidget {
               vertical: 8,
             ),
             decoration: BoxDecoration(
-              color: Color(0xff095EF1),
+              color: const Color(0xff095EF1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
               message,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 14,
                 fontFamily: AppFonts.w600,

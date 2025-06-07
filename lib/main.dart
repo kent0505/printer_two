@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,7 +21,7 @@ import 'features/photo/data/photo_repository.dart';
 import 'features/pro/bloc/pro_bloc.dart';
 import 'features/pro/data/pro_repository.dart';
 import 'features/share/bloc/share_bloc.dart';
-// import 'features/fire/firebase_options.dart';
+import 'features/fire/firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,9 +34,9 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
   // await prefs.clear();
 
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   if (isIOS()) {
     await Purchases.configure(
@@ -106,13 +106,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
- // return MaterialApp(
-    //   debugShowCheckedModeBanner: false,
-    //   theme: theme,
-    //   home: Scaffold(
-    //     body: Center(
-    //       child: Text(_sharedFiles.map((f) => f.toMap()).toString()),
-    //     ),
-    //   ),
-    // );
